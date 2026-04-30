@@ -47,7 +47,7 @@ CREATE TABLE payment_splits (
 -- 2. DATABASE AUTOMATION (TRIGGERS)
 -- ==========================================
 
--- Function to automatically sync received_amount when a payment is made 
+-- Trigger 1: Syncs received_amount when a payment is made (Your original code)
 CREATE OR REPLACE FUNCTION update_received_amount()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -62,11 +62,31 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger to execute the function after every new payment 
 CREATE TRIGGER after_payment_insert
 AFTER INSERT ON payment_splits
 FOR EACH ROW
 EXECUTE FUNCTION update_received_amount();
+
+
+-- Trigger 2: Automatically flips the status from Open to Close (The new addition)
+CREATE OR REPLACE FUNCTION update_sale_status()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- We do the math manually here to ensure the text flips at exactly 0
+    IF (NEW.gross_sales - NEW.received_amount) <= 0 THEN
+        NEW.status = 'Close';
+    ELSE
+        NEW.status = 'Open'; 
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_payment_status
+BEFORE UPDATE ON customer_sales
+FOR EACH ROW
+EXECUTE FUNCTION update_sale_status();
 
 -- ==========================================
 -- 3. INITIAL DATA MAINTENANCE (OPTIONAL)
