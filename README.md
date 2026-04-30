@@ -24,6 +24,6 @@ This is a data-driven web application built to manage branch sales, track paymen
    ```bash
    pip install -r requirements.txt
 
-##Launch the App: In the terminal, run the following command to start the Streamlit server:
----bash
+## Launch the App: In the terminal, run the following command to start the Streamlit server:
+ ```bash
    streamlit run app.py
