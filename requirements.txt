@@ -1,0 +1,4 @@
+Open new Terminal:
+pip install streamlit
+pip install pandas
+pip install psycopg2
