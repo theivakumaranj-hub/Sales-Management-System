@@ -21,7 +21,7 @@ This is a data-driven web application built to manage branch sales, track paymen
 ## How to Run This Application
 1. **Set up the Database:** Open pgAdmin, create a new database, and run the code inside `schema1.sql` to build the tables and triggers.
 2. ****Import data from the CSV files**
-3. 1. branches.csv
+   1. branches.csv
    2. users.csv
    3. customer_sales.csv
    4. payment_splits.csv
